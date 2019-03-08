@@ -20,21 +20,27 @@ import javax.swing.*;
 public class MassTextReplacer {
 
     public static void main(String[] args) {
-        File inputFile = getInputFile(args);
+        File inputDirectory = getInputFile(args);
         String searchString = getSearchString();
         String replaceString = getReplaceString();
-        if (inputFile.exists()) {
-            try (PDDocument document = PDDocument.load(inputFile)){
-                PDDocument newDoc = replaceText(document, searchString, replaceString);
+        if (inputDirectory.exists() && inputDirectory.isDirectory()) {
 
-                prepareOutputDir();
+            File[] directoryListing = inputDirectory.listFiles();
+            if (directoryListing != null) {
+                for (File child : directoryListing) {
+                    try (PDDocument document = PDDocument.load(child)){
+                        PDDocument newDoc = replaceText(document, searchString, replaceString);
 
-                saveCloseCurrent(inputFile.getName(), newDoc);
-            } catch (IOException ioe) {
-                displayMessage("IO Error: \n" + ioe.getMessage(), "Error", true, -1);
+                        prepareOutputDir();
+
+                        saveCloseCurrent(inputDirectory.getName(), newDoc);
+                    } catch (IOException ioe) {
+                        displayMessage("IO Error: \n" + ioe.getMessage(), "Error", true, -1);
+                    }
+                }
             }
         } else {
-            displayMessage("No file provided or file does not exist", "Error", true, -1);
+            displayMessage("No directory provided or directory does not exist", "Error", true, -1);
         }
     }
 
@@ -99,6 +105,9 @@ public class MassTextReplacer {
             final JFileChooser fileChooser = new JFileChooser();
 
             int chooserResult = fileChooser.showOpenDialog(null);
+            fileChooser.setCurrentDirectory(new java.io.File("."));
+            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            fileChooser.setAcceptAllFileFilterUsed(false);
 
             if (chooserResult == JFileChooser.APPROVE_OPTION) {
                 file = fileChooser.getSelectedFile();
