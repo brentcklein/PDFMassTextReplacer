@@ -14,7 +14,6 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageTree;
 import org.apache.pdfbox.pdmodel.common.PDStream;
-import org.apache.pdfbox.text.PDFTextStripper;
 
 import javax.swing.*;
 
@@ -22,19 +21,29 @@ public class MassTextReplacer {
 
     public static void main(String[] args) {
         File inputFile = getInputFile(args);
+        String searchString = getSearchString();
+        String replaceString = getReplaceString();
         if (inputFile.exists()) {
             try (PDDocument document = PDDocument.load(inputFile)){
-                PDDocument newDoc = replaceText(document, args[0], args[1]);
+                PDDocument newDoc = replaceText(document, searchString, replaceString);
 
                 prepareOutputDir();
 
-                saveCloseCurrent(args[0], newDoc);
+                saveCloseCurrent(inputFile.getName(), newDoc);
             } catch (IOException ioe) {
                 displayMessage("IO Error: \n" + ioe.getMessage(), "Error", true, -1);
             }
         } else {
             displayMessage("No file provided or file does not exist", "Error", true, -1);
         }
+    }
+
+    private static String getReplaceString() {
+        return "P.O. Box 4321";
+    }
+
+    private static String getSearchString() {
+        return "P.O. Box 1234";
     }
 
     public static PDDocument replaceText(PDDocument document, String searchString, String replacement) throws IOException {
