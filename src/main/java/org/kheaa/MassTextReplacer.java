@@ -100,22 +100,16 @@ public class MassTextReplacer {
     private static File getInputFile(String[] args) {
         File file = new File("");
 
-        if (args.length != 1) {
+        final JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new java.io.File("."));
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        fileChooser.setAcceptAllFileFilterUsed(false);
 
-            final JFileChooser fileChooser = new JFileChooser();
+        int chooserResult = fileChooser.showOpenDialog(null);
 
-            int chooserResult = fileChooser.showOpenDialog(null);
-            fileChooser.setCurrentDirectory(new java.io.File("."));
-            fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            fileChooser.setAcceptAllFileFilterUsed(false);
-
-            if (chooserResult == JFileChooser.APPROVE_OPTION) {
-                file = fileChooser.getSelectedFile();
-                System.out.println("User approved. File: " + file.getName());
-            }
-        } else {
-            file = new File(args[0]);
-            System.out.println("File provided via command line. File: " + file.getName());
+        if (chooserResult == JFileChooser.APPROVE_OPTION) {
+            file = fileChooser.getSelectedFile();
+            System.out.println("User approved. File: " + file.getName());
         }
 
         return file;
