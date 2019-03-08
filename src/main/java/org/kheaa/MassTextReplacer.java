@@ -46,11 +46,11 @@ public class MassTextReplacer {
     }
 
     private static String getReplaceString() {
-        return "P.O. Box 4321";
+        return "";
     }
 
     private static String getSearchString() {
-        return "P.O. Box 1234";
+        return "I encourage you to contact at to discuss all of your options with them.";
     }
 
     public static PDDocument replaceText(PDDocument document, String searchString, String replacement) throws IOException {
