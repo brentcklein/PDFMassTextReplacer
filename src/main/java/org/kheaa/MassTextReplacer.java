@@ -39,9 +39,9 @@ public class MassTextReplacer {
         tf2 = new JTextField();
         tf2.setBounds(175, 100, 150, 20);
         b1 = new JButton("Replace");
-        b1.setBounds(50, 200, 100, 30);
+        b1.setBounds(50, 200, 150, 30);
         b2 = new JButton("Cancel");
-        b2.setBounds(150, 200, 100, 30);
+        b2.setBounds(200, 200, 150, 30);
         b1.addActionListener(e -> {
             searchString = tf1.getText();
             replaceString = tf2.getText();
