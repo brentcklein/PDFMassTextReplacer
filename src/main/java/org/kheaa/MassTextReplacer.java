@@ -27,13 +27,14 @@ public class MassTextReplacer {
 
             File[] directoryListing = inputDirectory.listFiles();
             if (directoryListing != null) {
+
+                prepareOutputDir();
+
                 for (File child : directoryListing) {
                     try (PDDocument document = PDDocument.load(child)){
                         PDDocument newDoc = replaceText(document, searchString, replaceString);
 
-                        prepareOutputDir();
-
-                        saveCloseCurrent(inputDirectory.getName(), newDoc);
+                        saveCloseCurrent(child.getName(), newDoc);
                     } catch (IOException ioe) {
                         displayMessage("IO Error: \n" + ioe.getMessage(), "Error", true, -1);
                     }
