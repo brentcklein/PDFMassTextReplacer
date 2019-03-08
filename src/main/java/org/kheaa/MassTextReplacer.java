@@ -19,10 +19,55 @@ import javax.swing.*;
 
 public class MassTextReplacer {
 
+    private JTextField tf1,tf2;
+    private String[] args;
+
+    private String searchString, replaceString;
+
+    MassTextReplacer(String[] args) {
+        JLabel l1,l2;
+        JButton b1,b2;
+
+        this.args = args;
+        JFrame f = new JFrame();
+        l1 = new JLabel("Find:");
+        l1.setBounds(25, 50, 100, 20);
+        tf1 = new JTextField();
+        tf1.setBounds(175, 50, 150, 20);
+        l2 = new JLabel("Replace with:");
+        l2.setBounds(25, 100, 125, 20);
+        tf2 = new JTextField();
+        tf2.setBounds(175, 100, 150, 20);
+        b1 = new JButton("Replace");
+        b1.setBounds(50, 200, 75, 30);
+        b2 = new JButton("Cancel");
+        b2.setBounds(125, 200, 75, 30);
+        b1.addActionListener(e -> {
+            searchString = tf1.getText();
+            replaceString = tf2.getText();
+
+            f.setVisible(false);
+
+            searchFile();
+        });
+        b2.addActionListener(e -> displayMessage("No search terms provided.", "Info", true, -2));
+        f.add(l1);
+        f.add(l2);
+        f.add(tf1);
+        f.add(tf2);
+        f.add(b1);
+        f.add(b2);
+        f.setSize(400, 300);
+        f.setLayout(null);
+        f.setVisible(true);
+    }
+
     public static void main(String[] args) {
+        new MassTextReplacer(args);
+    }
+
+    private void searchFile() {
         File inputDirectory = getInputFile(args);
-        String searchString = getSearchString();
-        String replaceString = getReplaceString();
         if (inputDirectory.exists() && inputDirectory.isDirectory()) {
 
             File[] directoryListing = inputDirectory.listFiles();
@@ -43,14 +88,7 @@ public class MassTextReplacer {
         } else {
             displayMessage("No directory provided or directory does not exist", "Error", true, -1);
         }
-    }
-
-    private static String getReplaceString() {
-        return "";
-    }
-
-    private static String getSearchString() {
-        return "I encourage you to contact at to discuss all of your options with them.";
+        displayMessage("Text replaced successfully.", "Info", true, 0);
     }
 
     public static PDDocument replaceText(PDDocument document, String searchString, String replacement) throws IOException {
@@ -141,7 +179,7 @@ public class MassTextReplacer {
         if (filename != null)
         {
             // save document into file
-            File f = new File("output/" + filename + ".pdf");
+            File f = new File("output/" + filename);
             if (f.exists())
             {
                 displayMessage("File " + f + " already exists!", "Error", true, -1);
